@@ -4,8 +4,9 @@ public class PlayerMovement : MonoBehaviour
 {
 	public float moveSpeed;
 	public float jumpForce;
-	
-	public bool isJumping;
+    public float climbSpeed;
+
+    public bool isJumping;
 	public bool isGrounded;
     public bool isClimbing;
 
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
 	void Update()
 	{
+        horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed * Time.fixedDeltaTime;
         verticalMovement = Input.GetAxis("Vertical") * climbSpeed * Time.fixedDeltaTime;
 
         if (Input.GetButtonDown("Jump") && isGrounded && !isClimbing)
@@ -42,14 +44,14 @@ public class PlayerMovement : MonoBehaviour
 
 		
 
-		MovePlayer(horizontalMovement);
+		MovePlayer(horizontalMovement, verticalMovement);
 
 		Flip(rb.velocity.x);
 		float characterVelocity = Mathf.Abs(rb.velocity.x);
         animator.SetFloat("Speed", characterVelocity);
 	}
 
-	void MovePlayer(float _horizontalMovement)
+	void MovePlayer(float _horizontalMovement, float _verticalMovement)
 	{
         if (!isClimbing)
         {
