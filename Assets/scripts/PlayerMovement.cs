@@ -7,8 +7,9 @@ public class PlayerMovement : MonoBehaviour
 	
 	public bool isJumping;
 	public bool isGrounded;
+    public bool isClimbing;
 
-	public Transform groundCheckLeft;
+    public Transform groundCheckLeft;
 	public Transform groundCheckRight;
 
 	public Rigidbody2D rb;
@@ -16,14 +17,19 @@ public class PlayerMovement : MonoBehaviour
 	public Animator healthBar;
 	public SpriteRenderer spriteRenderer;
 
-	public int PointDeVie = 2;
+    private float verticalMovement;
+    private float horizontalMovement;
+
+    public int PointDeVie = 2;
 
 	private Vector3 velocity = Vector3.zero;
 
 
 	void Update()
 	{
-		if (Input.GetButtonDown("Jump") && isGrounded)
+        verticalMovement = Input.GetAxis("Vertical") * climbSpeed * Time.fixedDeltaTime;
+
+        if (Input.GetButtonDown("Jump") && isGrounded && !isClimbing)
 		{
 			isJumping = true;
 		}
@@ -45,15 +51,23 @@ public class PlayerMovement : MonoBehaviour
 
 	void MovePlayer(float _horizontalMovement)
 	{
-		Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
-		rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
+        if (!isClimbing)
+        {
+            Vector3 targetVelocity = new Vector2(_horizontalMovement, rb.velocity.y);
+            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
 
-		if(isJumping == true)
-		{
-			rb.AddForce(new Vector2(0f, jumpForce));
-			isJumping = false;
-		}
-	}
+            if (isJumping)
+            {
+                rb.AddForce(new Vector2(0f, jumpForce));
+                isJumping = false;
+            }
+        }
+        else
+        {
+            Vector3 targetVelocity = new Vector2(0, _verticalMovement);
+            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, .05f);
+        }
+    }
 
 
 
