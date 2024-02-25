@@ -12,6 +12,12 @@ public class PlayerMovement : MonoBehaviour
 	public Transform groundCheckRight;
 
 	public Rigidbody2D rb;
+	public Animator animator;
+	public Animator healthBar;
+	public SpriteRenderer spriteRenderer;
+
+	public int PointDeVie = 2;
+
 	private Vector3 velocity = Vector3.zero;
 
 
@@ -31,6 +37,10 @@ public class PlayerMovement : MonoBehaviour
 		
 
 		MovePlayer(horizontalMovement);
+
+		Flip(rb.velocity.x);
+		float characterVelocity = Mathf.Abs(rb.velocity.x);
+        animator.SetFloat("Speed", characterVelocity);
 	}
 
 	void MovePlayer(float _horizontalMovement)
@@ -44,4 +54,42 @@ public class PlayerMovement : MonoBehaviour
 			isJumping = false;
 		}
 	}
+
+
+
+	void Flip(float _velocity)
+    {
+        if (_velocity > 0.1f)
+        {
+            spriteRenderer.flipX = false;
+        }else if(_velocity < -0.1f)
+        {
+            spriteRenderer.flipX = true;
+        }
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+		if (collision.gameObject.layer == 6)
+		{
+			PointDeVie -= 1;
+			if (PointDeVie == 1)
+			{
+				healthBar.Play("UnCoeur");
+			}
+			else if ( PointDeVie <= 0) 
+			{
+				healthBar.Play("ZeroCoeur");
+			}
+		}
+
+        if (collision.gameObject.layer == 7)
+        {
+            PointDeVie -= 2;
+			healthBar.Play("ZeroCoeur");
+    
+        }
+
+    }
 }
