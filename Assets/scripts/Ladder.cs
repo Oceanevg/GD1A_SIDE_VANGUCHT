@@ -21,14 +21,14 @@ public class Ladder : MonoBehaviour
         {
             // descendre de l'echelle
             playerMovement.isClimbing = false;
-            topCollider.isTrigger = false;
+           
             return;
         }
 
         if (isInRange && Input.GetKeyDown(KeyCode.E))
         {
             playerMovement.isClimbing = true;
-            topCollider.isTrigger = true;
+            
         }
     }
 
@@ -47,7 +47,7 @@ public class Ladder : MonoBehaviour
         {
             isInRange = false;
             playerMovement.isClimbing = false;
-            topCollider.isTrigger = false;
+            
             interactUI.enabled = false;
         }
     }
