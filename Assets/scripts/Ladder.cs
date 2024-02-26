@@ -1,17 +1,16 @@
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class Ladder : MonoBehaviour
 {
     private bool isInRange;
     private PlayerMovement playerMovement;
-    public BoxCollider2D topCollider;
-    private Text interactUI;
+    
 
     void Awake()
     {
         playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
-        interactUI = GameObject.FindGameObjectWithTag("InteractUI").GetComponent<Text>();
+        
     }
 
     // Update is called once per frame
@@ -36,7 +35,7 @@ public class Ladder : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            interactUI.enabled = true;
+            
             isInRange = true;
         }
     }
@@ -47,8 +46,6 @@ public class Ladder : MonoBehaviour
         {
             isInRange = false;
             playerMovement.isClimbing = false;
-            
-            interactUI.enabled = false;
         }
     }
 }
